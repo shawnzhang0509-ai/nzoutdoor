@@ -1,6 +1,6 @@
 // 地图抽象层: 未来加 web 端只需在这里加 maplibre-gl-js 分支
 import React from 'react';
-import MapLibreGL from 'react-native-maplibre-gl';
+import MapLibreGL from '@maplibre/maplibre-react-native';
 import { View } from 'react-native';
 
 MapLibreGL.setAccessToken(null); // 自托管 PMTiles, 不需要 token
@@ -24,10 +24,12 @@ export default function MapView({ center = [174.76, -36.85], zoom = 10, markers 
     <View style={{ flex: 1 }}>
       <MapLibreGL.MapView
         style={{ flex: 1 }}
-        styleURL={STYLE_URL}
-        onRegionDidChange={async (e) => {
-          const bb = await (e as any).properties?.visibleBounds;
-          if (bb && onRegionChange) onRegionChange([bb[0][0], bb[0][1], bb[1][0], bb[1][1]]);
+        mapStyle={STYLE_URL}
+        onRegionDidChange={(e) => {
+          const bb = e.properties?.visibleBounds;
+          if (!bb || !onRegionChange) return;
+          const [ne, sw] = bb;
+          onRegionChange([sw[0], sw[1], ne[0], ne[1]]);
         }}
       >
         <MapLibreGL.Camera
@@ -40,7 +42,9 @@ export default function MapView({ center = [174.76, -36.85], zoom = 10, markers 
             id={m.id}
             coordinate={[m.lng, m.lat]}
             onSelected={() => onMarkerPress?.(m.id)}
-          />
+          >
+            <View style={{ width: 1, height: 1 }} />
+          </MapLibreGL.PointAnnotation>
         ))}
         {children}
       </MapLibreGL.MapView>

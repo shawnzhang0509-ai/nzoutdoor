@@ -18,7 +18,7 @@ values
   null, null, null,
   null, null,
   'Seed (verify via DOC ETL)', null, 'seed-hunua-falls', now(), null),
-('Mount Eden (Maungawhau)', 'Auckland's highest volcanic cone, 360° city views.', 'lookout'::place_category,
+('Mount Eden (Maungawhau)', 'Auckland''s highest volcanic cone, 360° city views.', 'lookout'::place_category,
   ST_SetSRID(ST_MakePoint(174.764, -36.88),4326)::geography,
   'Auckland', 'Auckland', null, null,
   'easy', null, true, null,
