@@ -30,14 +30,32 @@ pip install -r requirements.txt
 python run.py --source auckland_council
 ```
 
-### 3. App
+### 3. App（预览 = 本机模拟器/真机，不是 Vercel）
 ```bash
 cd app
 cp .env.example .env        # 填入 Supabase URL + anon key
 npm install
-npx expo prebuild           # 需要 dev client (maplibre 是原生模块)
-npx expo run:ios            # 或 run:android
+npx expo prebuild           # MapLibre 是原生模块，不能用 Expo Go
+npx expo run:ios            # 或 run:android — 首次会编译 dev client
+npm start                   # 之后改 JS 可热更新，仍用同一个 dev client
 ```
+
+**环境分工**
+| 用途 | 工具 |
+|------|------|
+| 日常预览 | 本机 Xcode Simulator / Android Emulator，或 USB 真机 + dev client |
+| 给测试员装包 | [Expo EAS Build](https://docs.expo.dev/build/introduction/) → TestFlight / 内测 APK |
+| 正式上架 | EAS Submit → App Store / Google Play |
+| 后端 | [Supabase Cloud](https://supabase.com)（Auth + DB + RPC） |
+| 数据同步 | GitHub Actions 跑 `etl/`（已有 workflow） |
+
+**推荐下一步（按顺序）**
+1. Supabase 建项目 → Dashboard 跑 migration/seed（或 CLI `db push`）→ 复制 URL + anon key 到 `app/.env`
+2. 本机 `cd app && npm install && npx expo prebuild && npx expo run:ios`（或 Android）
+3. 打开 Explore：应看到 MapLibre 底图 + 8 个 Auckland 种子点
+4. （可选）Council 图层 URL 进 `etl/config.yaml`，`python run.py` 灌更多点
+5. `npm i -g eas-cli && eas login && eas build:configure`，打第一个 **development** 或 **preview** 包装到真机
+6. M2：地图 marker 样式、Search 筛选；M3：Auth + Check-in + Passport
 
 ## 数据原则 (不可妥协)
 1. 只用官方公开数据 (DOC / LINZ / councils / OSM 标注来源)
