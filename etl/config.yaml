@@ -1,0 +1,46 @@
+# NZ Outdoor · 数据源清单
+# 原则: 只用官方公开数据; 商业源 (Google Maps / AllTrails / Trade Me) 一律不碰
+# 未知字段 = null, 绝不猜测
+
+sources:
+  # P0 · DOC 官方开发者 API (免费, 需注册 API key: https://api.doc.govt.nz)
+  # 覆盖 tracks / huts / campsites, 全国数据
+  doc_api:
+    enabled: true             # key 已于 2026-09-24 注册 (存于 .env / GitHub Secrets, 勿入库)
+    base_url: "https://api.doc.govt.nz"
+    api_key_env: "DOC_API_KEY"   # 注册后在 DOC Developer Portal 订阅 tracks/huts/campsites API
+    endpoints:
+      tracks: "/api/tracks"        # 以 portal 文档为准
+      huts: "/api/huts"
+      campsites: "/api/campsites"
+    category_map:
+      tracks: walk
+      huts: hut
+      campsites: campsite
+
+  # P0 · Auckland Council Open Data Hub (免认证, CC-BY 4.0)
+  # 入口: https://data-aucklandcouncil.opendata.arcgis.com
+  # 用法: 打开数据集页 → "View API resources" → 复制 GeoService URL 填到 layer_url
+  auckland_council:
+    enabled: true
+    layers:
+      - name: "Park Asset Location"
+        layer_url: "FILL_FROM_HUB"   # 例: https://services1.arcgis.com/n4yPwebTjJCmXB6W/arcgis/rest/services/<ServiceName>/FeatureServer/0
+        category: park
+        source_name: "Auckland Council"
+      - name: "Park Extents"
+        layer_url: "FILL_FROM_HUB"
+        category: park
+        source_name: "Auckland Council"
+      # TODO: 在 hub 搜 "beach" / "safeswim" / "bbq" / "toilets" 补海滩/烧烤区图层
+
+  # P1 · LINZ Data Service (免费注册 API key, https://data.linz.govt.nz)
+  linz:
+    enabled: false
+    api_key_env: "LINZ_API_KEY"
+    # 用途: 官方地名核对 + 保护区边界; PMTiles 底图制作
+
+  # P2 · OSM (Geofabrik 抽取, source_name 必须标 OpenStreetMap)
+  osm:
+    enabled: false
+    # 仅用于补充 waterfall/lookout 等 POI, 不冒充官方数据

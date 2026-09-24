@@ -1,0 +1,29 @@
+{
+  "name": "nz-outdoor-app",
+  "version": "0.1.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
+  },
+  "dependencies": {
+    "expo": "~53.0.0",
+    "expo-router": "~4.0.0",
+    "expo-location": "~18.0.0",
+    "expo-secure-store": "~14.0.0",
+    "react": "19.0.0",
+    "react-native": "0.79.0",
+    "react-native-maplibre-gl": "^10.1.4",
+    "react-native-safe-area-context": "5.4.0",
+    "react-native-screens": "~4.10.0",
+    "react-native-url-polyfill": "^2.0.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "@types/react": "~19.0.0"
+  }
+}
